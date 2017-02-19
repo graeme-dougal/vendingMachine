@@ -5,6 +5,9 @@ import com.tiderian.machine.exception.VendingMachineOffException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -78,5 +81,32 @@ public class VendingMachineTest {
         vendingMachine.setOn();
         vendingMachine.insertCoin(Coin.UNKNOWN);
         fail("Expected UnknownCoinException");
+    }
+
+    @Test(expected = VendingMachineOffException.class)
+    public void returnCoinsWHenMachineOffThrowsExcption() throws Exception {
+
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+        fail("Expected VendingMachineOffException");
+    }
+
+    @Test
+    public void returnInsertedCoins() throws Exception {
+
+        vendingMachine.setOn();
+
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+
+        List<Coin> returnedCoins = vendingMachine.returnCoins();
+        assertNotNull(returnedCoins);
+        assertEquals("Expected 3 coins", 3, returnedCoins.size());
+
+        int totalReturnedCoins = returnedCoins.stream().mapToInt(Coin::getValue).sum();
+        assertEquals("Returned coins should sum 30", 30, totalReturnedCoins);
+
+        // current machine balance should now be zero
+        assertEquals("Balance should be zero", 0, vendingMachine.getBalance());
     }
 }

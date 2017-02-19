@@ -1,5 +1,6 @@
 package com.tiderian.machine;
 
+import com.tiderian.machine.exception.NoCoinsInsertedException;
 import com.tiderian.machine.exception.UnknownCoinException;
 import com.tiderian.machine.exception.VendingMachineException;
 import com.tiderian.machine.exception.VendingMachineOffException;
@@ -58,6 +59,29 @@ public class VendingMachine {
      */
     public int getBalance() {
         return insertedCoins.stream().mapToInt(Coin::getValue).sum();
+    }
+
+    /**
+     * returnCoins
+     *
+     * @return List<Coin>
+     * @throws VendingMachineException
+     */
+    public List<Coin> returnCoins() throws VendingMachineException {
+
+        checkMachineStatus();
+
+        if (getBalance() == 0) {
+            throw new NoCoinsInsertedException("No Coins Inserted");
+        }
+
+        List<Coin> returnCoins = new ArrayList<>();
+        returnCoins.addAll(insertedCoins);
+
+        // re-initialise the inserted coins
+        insertedCoins.clear();
+
+        return returnCoins;
     }
 
     /**
