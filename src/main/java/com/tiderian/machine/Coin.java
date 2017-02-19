@@ -44,12 +44,11 @@ public enum Coin {
     }
 
     /**
-     * validCoin - checks whether the coin is a valid known coin
+     * isValid - checks whether the coin is a valid known coin
      *
-     * @param coin
      * @return boolean
      */
-    public boolean isValidCoin(Coin coin) {
-        return validCoins.contains(coin);
+    public boolean isValid() {
+        return validCoins.contains(this);
     }
 }

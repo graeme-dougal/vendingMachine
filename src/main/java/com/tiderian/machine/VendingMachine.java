@@ -67,16 +67,32 @@ public class VendingMachine {
      */
     public void insertCoin(Coin coin) throws VendingMachineException {
 
-        if (isOn()) {
-            if (coin.isValidCoin(coin)) {
-                insertedCoins.add(coin);
-            } else {
-                throw new UnknownCoinException("Unknown Coin Inserted");
-            }
+        checkMachineStatus();
+        validateCoin(coin);
 
-        } else {
-            throw new VendingMachineOffException("Vending Machine not switched on");
+        insertedCoins.add(coin);
+    }
+
+    /**
+     * checkMachineStatus
+     *
+     * @throws VendingMachineException
+     */
+    private void checkMachineStatus() throws VendingMachineException {
+        if (!isOn()) {
+            throw new VendingMachineOffException("Vending Machine is turned off");
         }
     }
 
+    /**
+     * validateCoin
+     *
+     * @param coin
+     */
+    private void validateCoin(Coin coin) throws UnknownCoinException {
+
+        if (!coin.isValid()) {
+            throw new UnknownCoinException("Unknown Coin detected");
+        }
+    }
 }
