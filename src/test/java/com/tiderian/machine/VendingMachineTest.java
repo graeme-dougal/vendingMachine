@@ -1,7 +1,9 @@
 package com.tiderian.machine;
 
+import com.tiderian.machine.exception.VendingMachineOffExceptoin;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Categories;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -50,6 +52,8 @@ public class VendingMachineTest {
     @Test
     public void balanceIncreasesWhenCoinsInserted() throws Exception {
 
+        vendingMachine.setOn();
+
         vendingMachine.insertCoin(Coin.TEN_PENCE);
         assertEquals("Balance should be 10", 10, vendingMachine.getBalance());
 
@@ -61,5 +65,12 @@ public class VendingMachineTest {
 
         vendingMachine.insertCoin(Coin.ONE_POUND);
         assertEquals("Balance should be 180", 180, vendingMachine.getBalance());
+    }
+
+    @Test(expected = VendingMachineOffExceptoin.class)
+    public void insertCoinsWhenMachineIsOffThrowsException() throws Exception {
+
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+
     }
 }

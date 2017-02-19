@@ -68,8 +68,8 @@ public class VendingMachine {
 
         if (isOn()) {
             insertedCoins.add(coin);
+        } else {
+            throw new VendingMachineOffExceptoin("Vending Machine not switched on");
         }
-
-        throw new VendingMachineOffExceptoin("Vending Machine not switched on");
     }
 }
