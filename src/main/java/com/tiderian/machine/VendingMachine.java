@@ -29,13 +29,16 @@ public class VendingMachine {
     // Manage the available items inside the vending machine
     private Map<Item, Integer> availableItems;
 
+    private ChangeHandler changeHandler;
+
     /**
      * Default Constructor
      */
     public VendingMachine() {
         super();
-        insertedCoins = new ArrayList<Coin>();
+        insertedCoins = new ArrayList<>();
         initialiseAvailableItems();
+        changeHandler = new ChangeHandler();
     }
 
     /**
@@ -97,6 +100,7 @@ public class VendingMachine {
      * insertCoin
      *
      * @param coin
+     * @throws  VendingMachineException - if an invalid coin is inserted
      */
     public void insertCoin(Coin coin) throws VendingMachineException {
 
@@ -110,7 +114,7 @@ public class VendingMachine {
      * getNumberAvailable - get the number available for a specific item
      *
      * @param item
-     * @return
+     * @return int - number available of supplied item
      */
     public int getNumberAvailable(Item item) throws VendingMachineException {
 
@@ -120,11 +124,42 @@ public class VendingMachine {
     }
 
     /**
+     * vendItem
+     *
+     * (1) Check That Machine is switched on
+     * (2) Check that requested item is availble
+     * (3) Check that there is enough inserted coins
+     * (4) Add inserted coins to machine store
+     * (5) Check for available change / balance
+     * (6) Decrement Item availability
+     * (7) Return item
+     *
+     * @param item
+     * @return Item
+     * @throws VendingMachineException if unable to dispense item
+     */
+    public Item vendItem(Item item) throws VendingMachineException {
+
+        checkMachineStatus();
+        checkItemAvailable(item);
+        checkSufficientFundsForItem(item);
+        addInsertedCoins();
+
+        // make change available for further vend or coin return if possible
+        insertedCoins = checkForChange(item);
+
+        decrementStockItem(item);
+
+        return item;
+    }
+
+    /**
      * checkMachineStatus
      *
      * @throws VendingMachineException
      */
     private void checkMachineStatus() throws VendingMachineException {
+
         if (!isOn()) {
             throw new VendingMachineOffException("Vending Machine is turned off");
         }
@@ -155,37 +190,67 @@ public class VendingMachine {
     }
 
     /**
-     * vendItem
+     * checkSufficientFundsForItem
      *
      * @param item
-     * @return
      */
-    public Item vendItem(Item item) throws VendingMachineException {
+    private void checkSufficientFundsForItem(Item item) throws VendingMachineException {
 
-        if (getBalance() >= item.getCost()) {
-
-            if (availableItems.get(item) > 0 ) {
-                // decrement available stock
-                availableItems.put(item, availableItems.get(item) -1);
-
-                // store inserted coins
-                for (Coin coin : insertedCoins) {
-                    availableCoins.put(coin, availableCoins.containsKey(coin) ? availableCoins.get(coin) +1 : 1);
-                }
-
-                // TODO - Check for change
-
-                // clear inserted coins
-                insertedCoins.clear();
-            } else {
-
-                throw new ItemUnavailableException("Item Unavailable");
-            }
-        } else {
-
+        if (getBalance() < item.getCost()) {
             throw new InsertMoreCoinsException("Insert More Coins");
         }
+    }
 
-        return item;
+    /**
+     * checkItemAvailable
+     *
+     * @param item
+     * @throws VendingMachineException
+     */
+    private void checkItemAvailable(Item item) throws VendingMachineException {
+
+        if (availableItems.get(item) == 0) {
+            throw new ItemUnavailableException("Item Unavailable");
+        }
+    }
+
+    /**
+     * addInsertedCoins - add inserted coins to the total coins contained within the machine
+     */
+    private void addInsertedCoins() {
+
+        for (Coin coin : insertedCoins) {
+            availableCoins.put(coin, availableCoins.containsKey(coin) ? availableCoins.get(coin) +1 : 1);
+        }
+    }
+
+    /**
+     * checkForChange
+     *
+     * Check whether change is applicable and if so delegate to ChangeHandler to calculate change to be given based
+     * on what change is available in the machine.
+     *
+     * @param item
+     * @return List<Coin> - list of coins to be returned
+     * @throws VendingMachineException - if unable to provide change
+     */
+    private List<Coin> checkForChange(Item item) throws VendingMachineException {
+
+        List<Coin> change = new ArrayList<>();
+
+        if (getBalance() - item.getCost() > 0) {
+            change = changeHandler.getChange(availableCoins, getBalance() - item.getCost());
+        }
+
+        return change;
+    }
+
+    /**
+     * decrementStockItem
+     *
+     * @param item
+     */
+    private void decrementStockItem(Item item) {
+        availableItems.put(item, availableItems.get(item) -1);
     }
 }

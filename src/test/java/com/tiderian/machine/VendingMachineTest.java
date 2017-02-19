@@ -1,11 +1,9 @@
 package com.tiderian.machine;
 
-import com.tiderian.machine.exception.UnknownCoinException;
-import com.tiderian.machine.exception.VendingMachineOffException;
+import com.tiderian.machine.exception.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.tiderian.machine.VendingMachine.INITIAL_STOCK;
@@ -91,6 +89,15 @@ public class VendingMachineTest {
         fail("Expected VendingMachineOffException");
     }
 
+    @Test(expected = NoCoinsInsertedException.class)
+    public void returnInsertedCoinsWhenNoCoindsInsertedThrowsException() throws Exception {
+
+        vendingMachine.setOn();
+
+        vendingMachine.returnCoins();
+        fail("Expected NoCoinsInsertedException");
+    }
+
     @Test
     public void returnInsertedCoins() throws Exception {
 
@@ -129,13 +136,94 @@ public class VendingMachineTest {
         vendingMachine.insertCoin(Coin.FIFTY_PENCE);
 
         // inital item available = 10
-        int numnberAvailable = vendingMachine.getNumberAvailable(Item.A);
+        int numberAvailable = vendingMachine.getNumberAvailable(Item.A);
 
         Item item = vendingMachine.vendItem(Item.A);
 
         assertNotNull(item);
         assertEquals("Expected Item A ", Item.A, item);
+        assertEquals("Expected one less item", numberAvailable-1, vendingMachine.getNumberAvailable(Item.A));
 
-        assertEquals("Expected one less item", numnberAvailable-1, vendingMachine.getNumberAvailable(Item.A));
+        // balance should now be zero
+        assertEquals("Expected Zero Balance", 0, vendingMachine.getBalance());
+    }
+
+    @Test(expected = InsertMoreCoinsException.class)
+    public void vendAvailableItemWithInsufficientFunds() throws Exception {
+
+        vendingMachine.setOn();
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+
+        vendingMachine.vendItem(Item.A);
+        fail("Expected InsertMoreCoinsException");
+    }
+
+    @Test(expected = ItemUnavailableException.class)
+    public void vendUnavailableItemThrowsItemUnavailableException() throws Exception {
+
+        vendingMachine.setOn();
+
+        /**
+         * Default number of initial items is 10
+         *
+         * Vend all 10 so there are no more available and then attempt to vend another one
+         */
+        for (int i=0; i<10; i++) {
+            vendingMachine.insertCoin(Coin.TEN_PENCE);
+            vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+            vendingMachine.vendItem(Item.A);
+        }
+
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+        vendingMachine.vendItem(Item.A);
+
+        fail("Expected ItemUnavailableException");
+    }
+
+    @Test(expected = ChangeUnavailableException.class)
+    public void vendAvailableItemWhenNoChangeAvailableThrowsException() throws Exception {
+
+        vendingMachine.setOn();
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+
+        vendingMachine.vendItem(Item.A);
+        fail("Expected ChangeUnavailableException");
+
+    }
+
+    @Test
+    public void vendAvailableItemWithCorrectChangeAvailable() throws Exception {
+
+        vendingMachine.setOn();
+
+        vendingMachine.insertCoin(Coin.TWENTY_PENCE);
+        vendingMachine.insertCoin(Coin.TWENTY_PENCE);
+        vendingMachine.insertCoin(Coin.TWENTY_PENCE);
+
+        // vend item A = 60, should now be 3 x 20p available in machine
+        vendingMachine.vendItem(Item.A);
+
+        // insert 2 x 50p (£1)
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+
+        // Vend Item A again, there is already 3 x 20p available inside machine so there should be 40p change available
+        Item item = vendingMachine.vendItem(Item.A);
+        assertNotNull("Expected item", item);
+
+        // Vending machine should have balance of 40 available
+        assertEquals("Expected remaining balance of 40", 40, vendingMachine.getBalance());
+
+        // return coins - should return available change (40)
+        List<Coin> coins = vendingMachine.returnCoins();
+        assertNotNull("Expected Coins to be returned", coins);
+        assertEquals("Expected 2 coins",2, coins.size());
+        assertEquals("Expected 20p,", Coin.TWENTY_PENCE, coins.get(0));
+        assertEquals("Expected 20p,", Coin.TWENTY_PENCE, coins.get(1));
+
+        // Machine balance should now be ero
+        assertEquals("Balance shoulc be zero", 0, vendingMachine.getBalance());
     }
 }
