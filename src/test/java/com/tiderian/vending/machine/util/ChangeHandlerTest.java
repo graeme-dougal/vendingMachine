@@ -1,6 +1,8 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine.util;
 
-import com.tiderian.machine.exception.ChangeUnavailableException;
+import com.tiderian.vending.machine.exception.ChangeUnavailableException;
+import com.tiderian.vending.machine.model.Coin;
+import com.tiderian.vending.machine.util.ChangeHandler;
 import org.junit.Before;
 import org.junit.Test;
 

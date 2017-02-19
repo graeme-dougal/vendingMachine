@@ -1,7 +1,8 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine.util;
 
-import com.tiderian.machine.exception.ChangeUnavailableException;
-import com.tiderian.machine.exception.VendingMachineException;
+import com.tiderian.vending.machine.exception.ChangeUnavailableException;
+import com.tiderian.vending.machine.exception.VendingMachineException;
+import com.tiderian.vending.machine.model.Coin;
 
 import java.util.*;
 

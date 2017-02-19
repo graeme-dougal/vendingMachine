@@ -1,12 +1,14 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine;
 
-import com.tiderian.machine.exception.*;
+import com.tiderian.vending.machine.exception.*;
+import com.tiderian.vending.machine.model.Coin;
+import com.tiderian.vending.machine.model.Item;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.tiderian.machine.VendingMachine.INITIAL_STOCK;
+import static com.tiderian.vending.machine.VendingMachine.INITIAL_STOCK;
 import static org.junit.Assert.*;
 
 /**

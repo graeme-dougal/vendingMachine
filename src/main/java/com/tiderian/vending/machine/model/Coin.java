@@ -1,4 +1,4 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine.model;
 
 import java.util.ArrayList;
 import java.util.List;

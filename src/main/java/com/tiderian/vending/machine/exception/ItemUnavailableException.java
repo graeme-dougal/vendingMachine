@@ -1,4 +1,4 @@
-package com.tiderian.machine.exception;
+package com.tiderian.vending.machine.exception;
 
 /**
  * Created by graeme.dougal on 19/02/2017.

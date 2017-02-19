@@ -1,4 +1,4 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine.model;
 
 /**
  * Created by graeme.dougal on 19/02/2017.

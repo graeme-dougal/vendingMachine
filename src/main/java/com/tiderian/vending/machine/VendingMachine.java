@@ -1,6 +1,9 @@
-package com.tiderian.machine;
+package com.tiderian.vending.machine;
 
-import com.tiderian.machine.exception.*;
+import com.tiderian.vending.machine.exception.*;
+import com.tiderian.vending.machine.model.Coin;
+import com.tiderian.vending.machine.model.Item;
+import com.tiderian.vending.machine.util.ChangeHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
