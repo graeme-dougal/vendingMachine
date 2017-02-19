@@ -1,7 +1,7 @@
 # Vending Machine
 Vending Machine TDD Coding Kata
 
-#OVERVIEW
+#Overview
 
 The goal of this program is to model a vending machine and the state it must maintain during its operation. How exactly the actions on the machine are driven is left intentionally vague and is up to the implementer. The machine works like all vending machines: it takes money then gives you items.
 
@@ -15,7 +15,17 @@ If you put more money in than the item’s price, you get change back.
 
 The machine can also be turned on and off.
 
-#SPECIFICATION
+#Instructions
+
+Project is a Java 8 based Maven project using JUnit as a Dependency.
+
+Make sure you have Java 8 and Maven Installed, and that both JAVA_HOME and MAVEN_HOME are on the path.
+
+Project can be built from its root folder by executing the command `mvn clean test`
+
+This will compile the code and run the unit tests.
+
+#Specification
 
 The valid set of actions on the vending machine is:
 * INSERT MONEY – Ten Pence, Twenty Pence, Fifty Pence, Pound

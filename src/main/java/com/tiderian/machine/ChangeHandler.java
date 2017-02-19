@@ -56,7 +56,7 @@ public class ChangeHandler {
 
                 } else if (coin.equals(Coin.TEN_PENCE)) {
                     /**
-                     * Down to last permutation of coin either
+                     * Down to last permutation of coin, either..
                      * (1) Coin is larger than change needed
                      * (2) Do not have any of these coins left
                      *

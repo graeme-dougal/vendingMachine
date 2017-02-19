@@ -3,7 +3,6 @@ package com.tiderian.machine;
 import com.tiderian.machine.exception.ChangeUnavailableException;
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.opto.MachCallNode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +39,12 @@ public class ChangeHandlerTest {
     }
 
     @Test(expected = ChangeUnavailableException.class)
-    public void changeIsUnavialableWhenChangeRequiredIsFourtyAndThereIsOneFiftyAvailable() throws Exception{
+    public void changeIsUnavailableWhenChangeRequiredIsFortyAndThereIsOneFiftyAvailable() throws Exception{
 
         Map<Coin, Integer> availableCoins = new HashMap<>();
         availableCoins.put(Coin.FIFTY_PENCE, 1);
 
-        List<Coin> coins = changeHandler.getChange(availableCoins, 40);
+        changeHandler.getChange(availableCoins, 40);
         fail("Expected ChangeUnavailableException");
     }
 }
