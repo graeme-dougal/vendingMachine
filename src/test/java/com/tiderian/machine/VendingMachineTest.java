@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.tiderian.machine.VendingMachine.INITIAL_STOCK;
 import static org.junit.Assert.*;
 
 /**
@@ -108,5 +109,33 @@ public class VendingMachineTest {
 
         // current machine balance should now be zero
         assertEquals("Balance should be zero", 0, vendingMachine.getBalance());
+    }
+
+    @Test
+    public void defaultNumberOfItemsAvailable() throws Exception {
+
+        vendingMachine.setOn();
+
+        assertEquals("Expected " + INITIAL_STOCK, INITIAL_STOCK, vendingMachine.getNumberAvailable(Item.A));
+        assertEquals("Expected " + INITIAL_STOCK, INITIAL_STOCK, vendingMachine.getNumberAvailable(Item.B));
+        assertEquals("Expected " + INITIAL_STOCK, INITIAL_STOCK, vendingMachine.getNumberAvailable(Item.C));
+    }
+
+    @Test
+    public void vendAvailableItemAWithExactMoney() throws Exception {
+
+        vendingMachine.setOn();
+        vendingMachine.insertCoin(Coin.TEN_PENCE);
+        vendingMachine.insertCoin(Coin.FIFTY_PENCE);
+
+        // inital item available = 10
+        int numnberAvailable = vendingMachine.getNumberAvailable(Item.A);
+
+        Item item = vendingMachine.vendItem(Item.A);
+
+        assertNotNull(item);
+        assertEquals("Expected Item A ", Item.A, item);
+
+        assertEquals("Expected one less item", numnberAvailable-1, vendingMachine.getNumberAvailable(Item.A));
     }
 }
