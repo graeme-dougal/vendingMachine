@@ -1,13 +1,11 @@
 package com.tiderian.machine;
 
-import com.tiderian.machine.exception.VendingMachineOffExceptoin;
+import com.tiderian.machine.exception.UnknownCoinException;
+import com.tiderian.machine.exception.VendingMachineOffException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Categories;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by graeme.dougal on 19/02/2017.
@@ -67,10 +65,18 @@ public class VendingMachineTest {
         assertEquals("Balance should be 180", 180, vendingMachine.getBalance());
     }
 
-    @Test(expected = VendingMachineOffExceptoin.class)
+    @Test(expected = VendingMachineOffException.class)
     public void insertCoinsWhenMachineIsOffThrowsException() throws Exception {
 
         vendingMachine.insertCoin(Coin.TEN_PENCE);
+        fail("Expected VendingMachineOffException");
+    }
 
+    @Test(expected = UnknownCoinException.class)
+    public void insertUnknownCoinThrowsException() throws Exception {
+
+        vendingMachine.setOn();
+        vendingMachine.insertCoin(Coin.UNKNOWN);
+        fail("Expected UnknownCoinException");
     }
 }

@@ -1,7 +1,8 @@
 package com.tiderian.machine;
 
+import com.tiderian.machine.exception.UnknownCoinException;
 import com.tiderian.machine.exception.VendingMachineException;
-import com.tiderian.machine.exception.VendingMachineOffExceptoin;
+import com.tiderian.machine.exception.VendingMachineOffException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +68,15 @@ public class VendingMachine {
     public void insertCoin(Coin coin) throws VendingMachineException {
 
         if (isOn()) {
-            insertedCoins.add(coin);
+            if (coin.isValidCoin(coin)) {
+                insertedCoins.add(coin);
+            } else {
+                throw new UnknownCoinException("Unknown Coin Inserted");
+            }
+
         } else {
-            throw new VendingMachineOffExceptoin("Vending Machine not switched on");
+            throw new VendingMachineOffException("Vending Machine not switched on");
         }
     }
+
 }
