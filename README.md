@@ -49,19 +49,19 @@ This will compile the code and run the unit tests, compiled code and unit test r
 ##Design
 The Vending machine provides a main interface class - `VendingMachine`.  This provides the main interface to the vending machine via the following operations
 
-- **`setOn()`** - switch the vending machine on
-- **`setOff()`** - switch the vending machine off
-- **`isOn()`** - check whether the machine is switched on
-- **`getBalance()`** - returns the sum of all coins currently inserted into the vending machine
-- **`returnCoins()`** - returns the coins currently inserted, providing the following state conditions are met
+- **`void:setOn()`** - switch the vending machine on
+- **`void:setOff()`** - switch the vending machine off
+- **`boolean:isOn()`** - check whether the machine is switched on
+- **`int:getBalance()`** - returns the sum of all coins currently inserted into the vending machine
+- **`List<Coin>:returnCoins()`** - returns the coins currently inserted, providing the following state conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
   * Vending Machine has inserted coins - throws `NoCoinsInsertedException` if no coins have been inserted
-- **`insertCoin(Coin)`** - insert a coin into the vending machine, providing the following state conditions are met
+- **`void:insertCoin(Coin)`** - insert a coin into the vending machine, providing the following state conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
   * Coin is a "Valid Coin" - throws `UnknownCoinException` if coin is not recognised
-- **`getNumberAvailable(Item item)`** - returns the number available for a given `Item`, providing the following sate conditions are met
+- **`int:getNumberAvailable(Item item)`** - returns the number available for a given `Item`, providing the following sate conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
-- **`vendItem(Item item)`** attempts to vend the given item, providing the following state conditions are met
+- **`void:vendItem(Item item)`** attempts to vend the given item, providing the following state conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
   * There is sufficent stock of the selected item - throws `ItemUnavailableException` if the item is not available
   * At least enough coins have been inserted into the machine - throws `InsertMoreCoinsException` is more coins needed

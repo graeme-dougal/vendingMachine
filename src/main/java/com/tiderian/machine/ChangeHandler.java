@@ -20,7 +20,7 @@ public class ChangeHandler {
      *
      * @param availableCoins - the coins available
      * @param changeRequired - the amount of change required
-     * @return List<Coin>
+     * @return List<Coin> - List of coins in change
      * @throws VendingMachineException - if it nos possible to return changed based on coins available or amount required
      */
     public List<Coin> getChange(Map<Coin, Integer> availableCoins, int changeRequired) throws VendingMachineException {
