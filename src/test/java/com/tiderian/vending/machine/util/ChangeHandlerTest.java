@@ -2,7 +2,6 @@ package com.tiderian.vending.machine.util;
 
 import com.tiderian.vending.machine.exception.ChangeUnavailableException;
 import com.tiderian.vending.machine.model.Coin;
-import com.tiderian.vending.machine.util.ChangeHandler;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,9 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by graeme.dougal on 19/02/2017.
