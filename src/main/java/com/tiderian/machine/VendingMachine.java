@@ -127,7 +127,7 @@ public class VendingMachine {
      * vendItem
      *
      * (1) Check That Machine is switched on
-     * (2) Check that requested item is availble
+     * (2) Check that requested item is available
      * (3) Check that there is enough inserted coins
      * (4) Add inserted coins to machine store
      * (5) Check for available change / balance
@@ -146,7 +146,7 @@ public class VendingMachine {
         addInsertedCoins();
 
         // make change available for further vend or coin return if possible
-        insertedCoins = checkForChange(item);
+        checkForChange(item);
 
         decrementStockItem(item);
 
@@ -231,10 +231,9 @@ public class VendingMachine {
      * on what change is available in the machine.
      *
      * @param item
-     * @return List<Coin> - list of coins to be returned
      * @throws VendingMachineException - if unable to provide change
      */
-    private List<Coin> checkForChange(Item item) throws VendingMachineException {
+    private void checkForChange(Item item) throws VendingMachineException {
 
         List<Coin> change = new ArrayList<>();
 
@@ -242,7 +241,7 @@ public class VendingMachine {
             change = changeHandler.getChange(availableCoins, getBalance() - item.getCost());
         }
 
-        return change;
+        insertedCoins = change;
     }
 
     /**

@@ -49,24 +49,55 @@ This will compile the code and run the unit tests, compiled code and unit test r
 ##Design
 The Vending machine provides a main interface class - `VendingMachine`.  This provides the main interface to the vending machine via the following operations
 
-- **setOn()** - switch the vending machine on
-- **setOff()** - switch the vending machine off
-- **isOn()** - check whether the machine is switched on
-- **getBalance()** - returns the sum of all coins currently inserted into the vending machine
-- **returnCoins()** - returns the coins currently inserted, providing the machine is in the following state
+- **`setOn()`** - switch the vending machine on
+- **`setOff()`** - switch the vending machine off
+- **`isOn()`** - check whether the machine is switched on
+- **`getBalance()`** - returns the sum of all coins currently inserted into the vending machine
+- **`returnCoins()`** - returns the coins currently inserted, providing the following state conditions are met
+  * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
+  * Vending Machine has inserted coins - throws `NoCoinsInsertedException` if no coins have been inserted
+- **`insertCoin(Coin)`** - insert a coin into the vending machine, providing the following state conditions are met
+  * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
+  * Coin is a "Valid Coin" - throws `UnknownCoinException` if coin is not recognised
+- **`getNumberAvailable(Item item)`** - returns the number available for a given `Item`, providing the following sate conditions are met
+  * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
+- **`vendItem(Item item)`** attempts to vend the given item, providing the following state conditions are met
+  * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
+  * There is sufficent stock of the selected item - throws `ItemUnavailableException` if the item is not available
+  * At least enough coins have been inserted into the machine - throws `InsertMoreCoinsException` is more coins needed
+  
+    Once the above conditions have been met, the vending machine will do the following
+    * Add the inserted coins into the machines coin store
+    * Check for available change (see below for detail)
+    * Decrement item availability
+    * Return selected item
 
-+++ Vending Machine is ON
+  * **Check for available change**
+  
+    The internal **`checkForChange(Item)` method is called which first of all determines whether change is applicable based on the value of the coins inserted and the price of the selected item.
+    
+    If change is indeed required, then the `ChangeHandler.getChange()` method is called which will attempt to return the demoniations of coins needed to fulfill the giving of change.
+    
+    Any change (list of coins) returned by the ChangeHandler is set as the available balance in the machine.  From here the coins acn be re-used to purchase another item or returned
+  
+  The `ChangeHandler` determines whether it is possible based on the coins contained within the machine and the amount of change required
+  whether it is actually possible to provide change back to the user.  If this is not possible then a `ChangeUnavailableException` is thrown
 
-+++ Vending Machine has inserted coins
+The Vending Machine, when initialised has the following default state
 
-***   
-
+- Off
+- No inserted Coins
+- No Coins already inserted from previous vending activities
+- A default number of 10 for each of the 3 items the machine is able to vend
 
 ##Notes / Considerations
 (1) A command line interface may have also proved useful for end-to-end testing, but this was not asked for and therefore
 deemed unnecessary to implement at this stage.
 
-(2) Although the tests have been developed using JUnit, it was considered to write them as Cucumber based, BDD tests in order to describe
+(2) A design decision was made to return the vended item and leave the change as available balance in the machine.  It was considered that
+an object containing the Item and the available change could be returned but this would need further requirements clarification.
+
+(3) Although the tests have been developed using JUnit, it was considered to write them as Cucumber based, BDD tests in order to describe
 the different scenarios in a more english based aspect. However, given the time, it was decided that Junit Tests would suffice.
   
   e.g. 
