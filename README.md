@@ -74,11 +74,11 @@ The Vending machine provides a main interface class - `VendingMachine`.  This pr
 
   * **Check for available change**
   
-    The internal **`checkForChange(Item)` method is called which first of all determines whether change is applicable based on the value of the coins inserted and the price of the selected item.
+    The internal **`checkForChange(Item)`** method is called which first of all determines whether change is applicable based on the value of the coins inserted and the price of the selected item.
     
-    If change is indeed required, then the `ChangeHandler.getChange()` method is called which will attempt to return the demoniations of coins needed to fulfill the giving of change.
+    If change is indeed required, then the `ChangeHandler.getChange()` method is called which will attempt to return the denominations of coins needed to fulfill the giving of change.
     
-    Any change (list of coins) returned by the ChangeHandler is set as the available balance in the machine.  From here the coins acn be re-used to purchase another item or returned
+    Any change (list of coins) returned by the ChangeHandler is set as the available balance in the machine.  From here the coins can be re-used to purchase another item or returned
   
   The `ChangeHandler` determines whether it is possible based on the coins contained within the machine and the amount of change required
   whether it is actually possible to provide change back to the user.  If this is not possible then a `ChangeUnavailableException` is thrown
