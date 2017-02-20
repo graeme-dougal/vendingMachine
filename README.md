@@ -44,7 +44,7 @@ Make sure you have Java 8 and Maven Installed, and that both JAVA_HOME and MAVEN
 
 Project can be built from its root folder by executing the command `mvn clean test`
 
-This will compile the code and run the unit tests, compiled code and unit test results will are available in the /target folder
+This will compile the code and run the unit tests, compiled code and unit test results will be available in the /target folder
 
 ##Design
 The Vending machine provides a main interface class - `VendingMachine`.  This provides the main interface to the vending machine via the following operations
@@ -61,7 +61,7 @@ The Vending machine provides a main interface class - `VendingMachine`.  This pr
   * Coin is a "Valid Coin" - throws `UnknownCoinException` if coin is not recognised
 - **`int:getNumberAvailable(Item item)`** - returns the number available for a given `Item`, providing the following sate conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
-- **`void:vendItem(Item item)`** attempts to vend the given item, providing the following state conditions are met
+- **`Item:vendItem(Item item)`** attempts to vend the given item, providing the following state conditions are met
   * Vending Machine is ON - throws `VendingMachineOffException` if machine is off
   * There is sufficent stock of the selected item - throws `ItemUnavailableException` if the item is not available
   * At least enough coins have been inserted into the machine - throws `InsertMoreCoinsException` is more coins needed
